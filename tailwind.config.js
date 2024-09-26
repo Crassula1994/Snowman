@@ -9,5 +9,8 @@ module.exports = {
     theme: {
         extend: {},
     },
+    daisyui: {
+        themes: ["nord"],
+    },
     plugins: [daisyui],
 };
