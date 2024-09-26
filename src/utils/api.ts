@@ -8,7 +8,7 @@ async function fetchGet(props: FetchProps) {
         params = {},
         contentType = "json",
         cache = true,
-        reavlidate = false,
+        revalidate = false,
         tags = [],
     } = props;
 
@@ -24,17 +24,6 @@ async function fetchGet(props: FetchProps) {
             headers.Authorization = accessToken;
         }
     }
-
-    const options: FetchOptionProps = {
-        method,
-        headers,
-        credentials: isAuth ? "include" : "omit",
-        cache: cache ? "force-cache" : "no-store",
-        next: {
-            revalidate,
-            tags,
-        },
-    };
 
     try {
         const response = await fetch(
