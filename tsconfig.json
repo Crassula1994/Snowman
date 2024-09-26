@@ -19,7 +19,8 @@
             "@configs/*": ["src/configs/*"],
             "@components/*": ["src/components/*"],
             "@customTypes/*": ["src/customTypes/*"],
-            "@styles/*": ["src/styles/*"]
+            "@styles/*": ["src/styles/*"],
+            "@utils/*": ["src/utils/*"]
         }
     },
     "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
