@@ -1,13 +1,13 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import AppRoutes from "./routes/index.route";
+import AppRoutes from "@routes/index.route";
 
 const App = () => {
-  return (
-    <div className="container">
-      <AppRoutes />
-    </div>
-  );
+    return (
+        <div className="container">
+            <AppRoutes />
+        </div>
+    );
 };
 
 export default App;
