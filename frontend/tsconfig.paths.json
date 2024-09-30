@@ -6,7 +6,8 @@
             "@customTypes/*": ["src/customTypes/*"],
             "@pages/*": ["src/pages/*"],
             "@routes/*": ["src/routes/*"],
-            "@service/*": ["src/service/*"]
+            "@service/*": ["src/service/*"],
+            "@styles/*": ["src/styles/*"]
         }
     }
 }

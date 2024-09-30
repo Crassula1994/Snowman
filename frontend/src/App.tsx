@@ -1,12 +1,16 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import AppRoutes from "@routes/index.route";
+import GlobalStyle from "@styles/globalStyles";
 
 const App = () => {
     return (
-        <div className="container">
-            <AppRoutes />
-        </div>
+        <>
+            <GlobalStyle />
+            <div className="container">
+                <AppRoutes />
+            </div>
+        </>
     );
 };
 
