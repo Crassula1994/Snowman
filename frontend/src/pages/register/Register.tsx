@@ -89,7 +89,7 @@ export default function Register() {
                             type="submit"
                             className="w-full"
                         >
-                            Sign Up
+                            회원가입
                         </Button>
                     </Form>
                 )}

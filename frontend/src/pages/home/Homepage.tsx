@@ -4,8 +4,8 @@ import { NavLink } from "react-router-dom";
 const Homepage = () => {
     return (
         <div className="container">
-            <h1>Homepage</h1>
-            <p>Welcome to the homepage of the application!</p>
+            <h1>홈페이지</h1>
+            <p>환영합니다!</p>
             <NavLink to="/register">
                 <button className="btn mx-3 btn-primary">회원가입</button>
             </NavLink>
