@@ -1,16 +1,12 @@
-import React, { FC } from "react";
+import React from "react";
 import { Form } from "react-bootstrap";
 import { Formik, Field, FormikProps, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import { Button, Container } from "./loginStyles";
+import { loginUser } from "../../service/index.service";
+import { UserType } from "@customTypes/userType";
 
-// Define the interface for form values
-interface FormValues {
-    email: string;
-    password: string;
-}
-
-const Login: FC = () => {
+export default function Login() {
     // Define validation schema using Yup
     const validationSchema = Yup.object().shape({
         email: Yup.string().required("Email is required"),
@@ -18,21 +14,23 @@ const Login: FC = () => {
     });
 
     // Define form submit handler
-    const handleSubmit = (
-        values: FormValues,
-        { setSubmitting }: FormikHelpers<FormValues>
+    const handleSubmit = async (
+        values: Partial<UserType>,
+        { setSubmitting }: FormikHelpers<Partial<UserType>>
     ) => {
         // Handle form submission
-        //console.log(values);
+        const submit = await loginUser(values);
+        console.log(values);
+        console.log(submit.message);
         setSubmitting(false);
     };
 
     return (
         <Container className="mx-auto max-w-md space-y-6">
             <div className="space-y-2 text-center">
-                <h1 className="text-3xl font-bold">Login in</h1>
+                <h1 className="text-3xl font-bold">로그인</h1>
                 <p className="text-gray-500 dark:text-gray-400">
-                    Enter your details to get started.
+                    회원가입 시 입력한 이메일과 비밀번호로 로그인하세요.
                 </p>
             </div>
             {/* Formik form wrapper */}
@@ -42,11 +40,11 @@ const Login: FC = () => {
                 onSubmit={handleSubmit}
             >
                 {/* Render form inside Formik */}
-                {({ handleSubmit }: FormikProps<FormValues>) => (
+                {({ handleSubmit }: FormikProps<Partial<UserType>>) => (
                     <Form className="space-y-4" onSubmit={handleSubmit}>
                         {/* Email input field */}
                         <Form.Group className="mb-3" controlId="email">
-                            <Form.Label>Email</Form.Label>
+                            <Form.Label>이메일</Form.Label>
                             <Field
                                 type="email"
                                 name="email"
@@ -55,7 +53,7 @@ const Login: FC = () => {
                         </Form.Group>
                         {/* Password input field */}
                         <Form.Group className="mb-3" controlId="password">
-                            <Form.Label>Password</Form.Label>
+                            <Form.Label>비밀번호</Form.Label>
                             <Field
                                 type="password"
                                 name="password"
@@ -64,13 +62,11 @@ const Login: FC = () => {
                         </Form.Group>
                         {/* Submit button */}
                         <Button primary="true" type="submit" className="w-full">
-                            Sign In
+                            로그인
                         </Button>
                     </Form>
                 )}
             </Formik>
         </Container>
     );
-};
-
-export default Login;
+}
