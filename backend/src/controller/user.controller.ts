@@ -3,7 +3,6 @@ import axios from "axios";
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
 import moment from "moment-timezone";
-import { pool } from "../config/connectDB";
 import { signRefreshToken } from "../utils/jsonWebToken";
 
 dotenv.config();
@@ -14,8 +13,6 @@ const API_ACCESS_TOKEN = process.env.API_ACCESS_TOKEN;
 // register a new user
 export const register = async (req: Request, res: Response) => {
     try {
-        console.log(API_URL);
-
         // get the user data from the request body
         const { username, email, password } = req.body;
 
@@ -26,13 +23,38 @@ export const register = async (req: Request, res: Response) => {
             });
         }
 
+        const emailListFilter = {
+            bpname: "SignUp (Geun)",
+            lineitem: "no",
+            filter_condition: "status=Active",
+            filter_criteria: {
+                filter: [
+                    {
+                        field: "cegEmail",
+                        value: email,
+                        condition_type: "eq",
+                    },
+                ],
+            },
+            record_fields: "cegEmail",
+        };
+
         // check if user already exists
-        // const existingUsers = await axios.get(`${API_URL}`);
-        // if (user.rows.length > 0) {
-        //     return res.status(400).json({
-        //         message: "User with this email already exists",
-        //     });
-        // }
+        const response = await axios.post(
+            `${API_URL}/records`,
+            emailListFilter,
+            {
+                headers: {
+                    Authorization: `Bearer ${API_ACCESS_TOKEN}`,
+                },
+            }
+        );
+
+        if (response.data.data.length > 0) {
+            return res.status(400).json({
+                message: "해당 이메일로 이미 가입된 계정이 존재합니다.",
+            });
+        }
 
         // hash the password
         const salt = await bcrypt.genSalt(10);
@@ -83,40 +105,61 @@ export const login = async (req: Request, res: Response) => {
             });
         }
 
-        // check if user exists
-        const user = await pool.query("SELECT * FROM users WHERE email = $1", [
-            email,
-        ]);
+        const userInfoFilter = {
+            bpname: "SignUp (Geun)",
+            lineitem: "yes",
+            lineitem_fields: "cegType;cegCreatedAt2;cegIPAdress",
+            filter_condition: "status=Active",
+            filter_criteria: {
+                filter: [
+                    {
+                        field: "cegEmail",
+                        value: email,
+                        condition_type: "eq",
+                    },
+                ],
+            },
+            record_fields: "cegUserName;cegEmail;cegPassword;cegRefreshToken",
+        };
 
-        if (user.rows.length === 0) {
+        // check if user already exists
+        const user = await axios.post(`${API_URL}/records`, userInfoFilter, {
+            headers: {
+                Authorization: `Bearer ${API_ACCESS_TOKEN}`,
+            },
+        });
+
+        if (user.data.data.length === 0) {
             return res.status(400).json({
-                message: "User does not exist",
+                message: "잘못된 이메일 또는 비밀번호입니다.",
             });
         }
+
+        const userData = user.data.data[0];
 
         // compare the password
         const validPassword = await bcrypt.compare(
             password,
-            user.rows[0].password
+            userData.cegPassword
         );
         if (!validPassword) {
             return res.status(400).json({
-                message: "Invalid password",
+                message: "잘못된 이메일 또는 비밀번호입니다.",
             });
         }
 
         // If the email and password are valid, return user data
         return res.status(200).json({
-            message: "User logged in successfully",
+            message: "사용자 로그인에 성공하였습니다.",
             user: {
-                id: user.rows[0].id,
-                username: user.rows[0].username,
-                email: user.rows[0].email,
+                id: userData.record_no,
+                username: userData.cegUserName,
+                email: userData.cegEmail,
             },
         });
     } catch (error) {
         return res.status(500).json({
-            message: "Internal Server Error",
+            message: "서버 에러가 발생했습니다.",
         });
     }
 };
