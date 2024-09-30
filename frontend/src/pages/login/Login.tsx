@@ -1,9 +1,8 @@
-import React from "react";
 import { Form } from "react-bootstrap";
 import { Formik, Field, FormikProps, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import { Button, Container } from "./loginStyles";
-import { loginUser } from "../../service/index.service";
+import { loginUser } from "@service/index.service";
 import { UserType } from "@customTypes/userType";
 
 export default function Login() {

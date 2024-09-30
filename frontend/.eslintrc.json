@@ -16,6 +16,7 @@
     "plugins": ["@typescript-eslint", "react"],
     "rules": {
         "quotes": ["error", "double"],
+        "react/react-in-jsx-scope": "off",
         "semi": ["error", "always"]
     }
 }
