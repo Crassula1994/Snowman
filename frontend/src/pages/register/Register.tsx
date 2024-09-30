@@ -2,18 +2,35 @@ import { useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import { Formik, Field, FormikProps, FormikHelpers } from "formik";
 import * as Yup from "yup";
-import { registerUser } from "../../service/index.service";
+import { registerUser } from "@service/index.service";
 import { UserType } from "@customTypes/userType";
+import { NavLink } from "react-router-dom";
 
 export default function Register() {
     const [success, setSuccess] = useState("");
 
     const validationSchema = Yup.object().shape({
-        username: Yup.string().required("Name is required"),
+        username: Yup.string()
+            .min(2, "이름이 너무 짧습니다.")
+            .max(15, "이름이 너무 깁니다.")
+            .required("이름을 입력해야 합니다.")
+            .matches(/^[가-힣]+$/, "이름의 형식이 올바르지 않습니다."),
         email: Yup.string()
-            .email("Invalid email address")
-            .required("Email is required"),
-        password: Yup.string().required("Password is required"),
+            .email("유효하지 않은 이메일 주소입니다.")
+            .required("이메일을 입력해야 합니다."),
+        password: Yup.string()
+            .min(8, "비밀번호가 너무 짧습니다.")
+            .max(20, "비밀번호가 너무 깁니다.")
+            .matches(
+                /[A-Z]/,
+                "비밀번호에 영어 대문자를 한 글자 이상 포함해야 합니다."
+            )
+            .matches(/\d/, "비밀번호에 숫자를 한 글자 이상 포함해야 합니다.")
+            .matches(
+                /[@$!%*?&]/,
+                "비밀번호에 특수문자를 한 글자 이상 포함해야 합니다."
+            )
+            .required("비밀번호를 입력해야 합니다."),
     });
 
     const handleSubmit = async (
@@ -40,7 +57,7 @@ export default function Register() {
                 validationSchema={validationSchema}
                 onSubmit={handleSubmit}
             >
-                {({ handleSubmit }: FormikProps<UserType>) => (
+                {({ handleSubmit, errors, touched }: FormikProps<UserType>) => (
                     <Form className="space-y-4" onSubmit={handleSubmit}>
                         {success && (
                             <div
@@ -55,16 +72,32 @@ export default function Register() {
                                 }}
                             >
                                 {success}
+                                <NavLink to="/">
+                                    <Button
+                                        variant="primary"
+                                        type="submit"
+                                        className="w-full"
+                                    >
+                                        홈으로
+                                    </Button>
+                                </NavLink>
                             </div>
                         )}
                         <Form.Group className="mb-3" controlId="name">
-                            <Form.Label>성명</Form.Label>
+                            <Form.Label>이름</Form.Label>
                             <Field
                                 type="text"
                                 name="username"
                                 as={Form.Control}
                             />
-                            <Form.Control.Feedback type="invalid" />
+                            {errors.username && touched.username ? (
+                                <div>{errors.username}</div>
+                            ) : null}
+                            {/* {errors.username && touched.username && (
+                                <Form.Control.Feedback type="invalid">
+                                    {errors.username}
+                                </Form.Control.Feedback>
+                            )} */}
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="email">
                             <Form.Label>이메일</Form.Label>
@@ -73,15 +106,26 @@ export default function Register() {
                                 name="email"
                                 as={Form.Control}
                             />
-                            <Form.Control.Feedback type="invalid" />
+                            {errors.email && touched.email ? (
+                                <div>{errors.email}</div>
+                            ) : null}
+                            <Form.Control.Feedback type="invalid">
+                                {errors.email}
+                            </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="password">
-                            <Form.Label>비밀번호</Form.Label>
+                            <Form.Label>
+                                비밀번호: 영어 대문자, 숫자, 특수문자를 포함하는
+                                8글자 이상의 비밀번호가 필요합니다.
+                            </Form.Label>
                             <Field
                                 type="password"
                                 name="password"
                                 as={Form.Control}
                             />
+                            {errors.password && touched.password ? (
+                                <div>{errors.password}</div>
+                            ) : null}
                             <Form.Control.Feedback type="invalid" />
                         </Form.Group>
                         <Button

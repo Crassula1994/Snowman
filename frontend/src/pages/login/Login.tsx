@@ -4,12 +4,17 @@ import * as Yup from "yup";
 import { Button, Container } from "./loginStyles";
 import { loginUser } from "@service/index.service";
 import { UserType } from "@customTypes/userType";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+    const navigate = useNavigate();
+
     // Define validation schema using Yup
     const validationSchema = Yup.object().shape({
-        email: Yup.string().required("Email is required"),
-        password: Yup.string().required("Password is required"),
+        email: Yup.string()
+            .email("유효하지 않은 이메일 주소입니다.")
+            .required("이메일을 입력해야 합니다."),
+        password: Yup.string().required("비밀번호를 입력해야 합니다."),
     });
 
     // Define form submit handler
@@ -21,7 +26,9 @@ export default function Login() {
         const submit = await loginUser(values);
         console.log(values);
         console.log(submit.message);
+        console.log(submit);
         setSubmitting(false);
+        navigate("/");
     };
 
     return (

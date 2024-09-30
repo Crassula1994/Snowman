@@ -3,7 +3,7 @@ import axios from "axios";
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
 import moment from "moment-timezone";
-import { signRefreshToken } from "../utils/jsonWebToken";
+import signSessionToken from "../utils/expressSessionToken";
 
 dotenv.config();
 
@@ -70,7 +70,7 @@ export const register = async (req: Request, res: Response) => {
                     cegUserName: username,
                     cegPassword: hashedPassword,
                     cegEmail: email,
-                    cegRefreshToken: signRefreshToken(),
+                    cegRefreshToken: signSessionToken(),
                 },
             ],
         };
@@ -82,12 +82,12 @@ export const register = async (req: Request, res: Response) => {
         });
 
         return res.status(200).json({
-            message: "User registered successfully",
+            message: "회원가입이 정상적으로 완료되었습니다.",
         });
     } catch (error) {
         console.log(error);
         return res.status(500).json({
-            message: "Internal Server Error",
+            message: "서버 에러가 발생했습니다.",
         });
     }
 };
@@ -158,6 +158,28 @@ export const login = async (req: Request, res: Response) => {
             },
         });
     } catch (error) {
+        return res.status(500).json({
+            message: "서버 에러가 발생했습니다.",
+        });
+    }
+};
+
+// Generate Session Token
+export const signToken = async (req: Request, res: Response) => {
+    try {
+        const sessionToken = signSessionToken();
+
+        // req.session.cookie = sessionToken;
+
+        // 세션 토큰 만들어서 db에 저장했다고 치자.
+
+        // res.cookie();
+
+        return res.status(200).json({
+            message: "세션 토큰이 정상적으로 발급되었습니다.",
+        });
+    } catch (error) {
+        console.log(error);
         return res.status(500).json({
             message: "서버 에러가 발생했습니다.",
         });

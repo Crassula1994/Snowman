@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import morgan from "morgan";
 import userRouter from "./routes/user.route";
+import session from "express-session";
 
 dotenv.config();
 
@@ -15,12 +16,15 @@ app.use(cors()); // Enable CORS for all requests
 app.use(morgan("dev")); // Log all requests to the console
 
 const PORT = process.env.PORT;
+const EXPRESS_SESSION_SECRET_KEY = process.env.EXPRESS_SESSION_SECRET_KEY!;
+const EXPRESS_SESSION_MAX_AGE = Number(process.env.EXPRESS_SESSION_MAX_AGE);
+const NODE_ENV = process.env.NODE_ENV;
 
 // Basic route
 app.get("/", (req: Request, res: Response) => {
     try {
         return res.status(200).json({
-            message: " Welcome to CodeGenitor API",
+            message: "Welcome to Snowman API",
         });
     } catch (error) {
         return res.status(500).json({
@@ -28,6 +32,19 @@ app.get("/", (req: Request, res: Response) => {
         });
     }
 });
+
+app.use(
+    session({
+        secret: EXPRESS_SESSION_SECRET_KEY,
+        resave: false,
+        saveUninitialized: true,
+        cookie: {
+            httpOnly: true,
+            secure: NODE_ENV == "production",
+            maxAge: EXPRESS_SESSION_MAX_AGE,
+        },
+    })
+);
 
 // User routes
 app.use("/api/user", userRouter);

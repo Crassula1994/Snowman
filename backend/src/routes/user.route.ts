@@ -1,6 +1,5 @@
 import { Router } from "express";
-
-import { register, login } from "../controller/user.controller";
+import { register, login, signToken } from "../controller/user.controller";
 
 const userRouter = Router();
 
@@ -9,5 +8,8 @@ userRouter.post("/register", register);
 
 // Login a user
 userRouter.post("/login", login);
+
+// Generate Session Token
+userRouter.post("/sign-token", signToken);
 
 export default userRouter;
