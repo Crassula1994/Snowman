@@ -1,8 +1,8 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import Homepage from "@pages/home/Homepage";
-import Login from "@pages/login/Login";
-import Play from "@pages/play/Play";
-import Register from "@pages/register/Register";
+import Home from "@pages/home";
+import Login from "@pages/login";
+import Play from "@pages/play";
+import Register from "@pages/register";
 
 // Component for defining application routes
 export default function AppRoutes() {
@@ -14,7 +14,7 @@ export default function AppRoutes() {
             {/* Define application routes */}
             <Routes>
                 {/* Route for homepage, redirects to homepage if user is authenticated, otherwise redirects to login */}
-                <Route path="/" element={<Homepage />} />
+                <Route path="/" element={<Home />} />
                 {/* Route for registration page, redirects to homepage if user is authenticated, otherwise renders registration page */}
                 {user ? (
                     <Route path="/register" element={<Navigate to="/" />} />
