@@ -1,12 +1,11 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Homepage from "@pages/home/Homepage";
-import Register from "@pages/register/Register";
 import Login from "@pages/login/Login";
 import Play from "@pages/play/Play";
+import Register from "@pages/register/Register";
 
 // Component for defining application routes
-const AppRoutes = () => {
-    // Check if user is authenticated (dummy value for demonstration)
+export default function AppRoutes() {
     const user = false;
 
     return (
@@ -31,13 +30,12 @@ const AppRoutes = () => {
                 {user ? (
                     <Route path="/play" element={<Play />} />
                 ) : (
-                    <Route path="/play" element={<Navigate to="/login" />} />
+                    // <Route path="/play" element={<Navigate to="/login" />} />
+                    <Route path="/play" element={<Play />} />
                 )}
                 {/* Route for 404 not found page, renders 404 not found page if no route matche*/}
                 <Route path="*" element={<h1>404 not found</h1>} />
             </Routes>
         </BrowserRouter>
     );
-};
-
-export default AppRoutes;
+}
