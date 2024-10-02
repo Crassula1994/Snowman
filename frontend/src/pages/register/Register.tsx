@@ -5,6 +5,22 @@ import * as Yup from "yup";
 import { registerUser } from "@service/index.service";
 import { UserType } from "@customTypes/userType";
 import { NavLink } from "react-router-dom";
+import styled from "styled-components";
+
+const TitleWrapper = styled("div")`
+    font-weight: 900;
+    font-size: 50px;
+`;
+
+const DescWrapper = styled("div")`
+    font-weight: 400;
+    font-size: 20px;
+`;
+
+const ButtonWrapper = styled("div")`
+    display: flex;
+    justify-content: center;
+`;
 
 export default function Register() {
     const [success, setSuccess] = useState("");
@@ -47,11 +63,12 @@ export default function Register() {
     return (
         <div className="mx-auto max-w-md space-y-6">
             <div className="space-y-2 text-center">
-                <h1 className="text-3xl font-bold">회원가입</h1>
-                <p className="text-gray-500 dark:text-gray-400">
+                <TitleWrapper>회원가입</TitleWrapper>
+                <DescWrapper>
                     회원가입을 위해 필요한 정보를 입력하세요.
-                </p>
+                </DescWrapper>
             </div>
+            <hr />
             <Formik
                 initialValues={{ username: "", email: "", password: "" }}
                 validationSchema={validationSchema}
@@ -84,7 +101,10 @@ export default function Register() {
                             </div>
                         )}
                         <Form.Group className="mb-3" controlId="name">
-                            <Form.Label>이름</Form.Label>
+                            <Form.Label>
+                                <b>이름</b>: 한글로 된 2 ~ 15글자의 이름이
+                                필요합니다.
+                            </Form.Label>
                             <Field
                                 type="text"
                                 name="username"
@@ -100,7 +120,9 @@ export default function Register() {
                             )} */}
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="email">
-                            <Form.Label>이메일</Form.Label>
+                            <Form.Label>
+                                <b>이메일</b>
+                            </Form.Label>
                             <Field
                                 type="email"
                                 name="email"
@@ -115,8 +137,8 @@ export default function Register() {
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="password">
                             <Form.Label>
-                                비밀번호: 영어 대문자, 숫자, 특수문자를 포함하는
-                                8글자 이상의 비밀번호가 필요합니다.
+                                <b>비밀번호</b>: 영어 대문자, 숫자, 특수문자를
+                                포함하는 8글자 이상의 비밀번호가 필요합니다.
                             </Form.Label>
                             <Field
                                 type="password"
@@ -128,13 +150,16 @@ export default function Register() {
                             ) : null}
                             <Form.Control.Feedback type="invalid" />
                         </Form.Group>
-                        <Button
-                            variant="primary"
-                            type="submit"
-                            className="w-full"
-                        >
-                            회원가입
-                        </Button>
+                        <hr />
+                        <ButtonWrapper>
+                            <Button
+                                variant="primary"
+                                type="submit"
+                                className="w-full"
+                            >
+                                회원가입
+                            </Button>
+                        </ButtonWrapper>
                     </Form>
                 )}
             </Formik>

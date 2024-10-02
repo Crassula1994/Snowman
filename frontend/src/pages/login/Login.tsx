@@ -5,6 +5,22 @@ import { Button, Container } from "./loginStyles";
 import { loginUser } from "@service/index.service";
 import { UserType } from "@customTypes/userType";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+
+const TitleWrapper = styled("div")`
+    font-weight: 900;
+    font-size: 50px;
+`;
+
+const DescWrapper = styled("div")`
+    font-weight: 400;
+    font-size: 20px;
+`;
+
+const ButtonWrapper = styled("div")`
+    display: flex;
+    justify-content: center;
+`;
 
 export default function Login() {
     const navigate = useNavigate();
@@ -28,17 +44,20 @@ export default function Login() {
         console.log(submit.message);
         console.log(submit);
         setSubmitting(false);
-        navigate("/");
+        if (submit.user) {
+            navigate("/play", { state: { user: submit.user } });
+        }
     };
 
     return (
         <Container className="mx-auto max-w-md space-y-6">
             <div className="space-y-2 text-center">
-                <h1 className="text-3xl font-bold">로그인</h1>
-                <p className="text-gray-500 dark:text-gray-400">
+                <TitleWrapper>로그인</TitleWrapper>
+                <DescWrapper>
                     회원가입 시 입력한 이메일과 비밀번호로 로그인하세요.
-                </p>
+                </DescWrapper>
             </div>
+            <hr />
             {/* Formik form wrapper */}
             <Formik
                 initialValues={{ email: "", password: "" }}
@@ -66,10 +85,17 @@ export default function Login() {
                                 as={Form.Control}
                             />
                         </Form.Group>
+                        <hr />
                         {/* Submit button */}
-                        <Button primary="true" type="submit" className="w-full">
-                            로그인
-                        </Button>
+                        <ButtonWrapper>
+                            <Button
+                                primary="true"
+                                type="submit"
+                                className="w-full"
+                            >
+                                로그인
+                            </Button>
+                        </ButtonWrapper>
                     </Form>
                 )}
             </Formik>
