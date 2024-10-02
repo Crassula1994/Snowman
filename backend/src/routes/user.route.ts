@@ -1,5 +1,10 @@
 import { Router } from "express";
-import { register, login, signToken } from "../controller/user.controller";
+import {
+    register,
+    login,
+    logout,
+    checkUser,
+} from "../controller/user.controller";
 
 const userRouter = Router();
 
@@ -9,7 +14,10 @@ userRouter.post("/register", register);
 // Login a user
 userRouter.post("/login", login);
 
-// Generate Session Token
-userRouter.post("/sign-token", signToken);
+// Logout a user
+userRouter.post("/logout", logout);
+
+// User Login check
+userRouter.get("/check", checkUser);
 
 export default userRouter;
