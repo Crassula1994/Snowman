@@ -15,9 +15,7 @@ export default function App() {
     return (
         <AppContainer>
             <GlobalStyle />
-            <div>
-                <AppRoutes />
-            </div>
+            <AppRoutes />
         </AppContainer>
     );
 }
