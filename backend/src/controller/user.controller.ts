@@ -3,7 +3,6 @@ import axios from "axios";
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
 import moment from "moment-timezone";
-import signSessionToken from "../utils/expressSessionToken";
 
 dotenv.config();
 
@@ -51,7 +50,7 @@ export const register = async (req: Request, res: Response) => {
         );
 
         if (response.data.data.length > 0) {
-            return res.status(400).json({
+            return res.status(403).json({
                 message: "해당 이메일로 이미 가입된 계정이 존재합니다.",
             });
         }
@@ -70,7 +69,6 @@ export const register = async (req: Request, res: Response) => {
                     cegUserName: username,
                     cegPassword: hashedPassword,
                     cegEmail: email,
-                    cegRefreshToken: signSessionToken(),
                 },
             ],
         };
@@ -119,7 +117,7 @@ export const login = async (req: Request, res: Response) => {
                     },
                 ],
             },
-            record_fields: "cegUserName;cegEmail;cegPassword;cegRefreshToken",
+            record_fields: "cegUserName;cegEmail;cegPassword",
         };
 
         // check if user already exists
@@ -148,13 +146,23 @@ export const login = async (req: Request, res: Response) => {
             });
         }
 
+        // session Created
+        req.session.user = {
+            id: userData.record_no,
+            username: userData.cegUserName,
+            email: userData.cegEmail,
+        };
+        req.session.isOnline = true;
+
+        console.log("로그인시", req.session);
+
         // If the email and password are valid, return user data
         return res.status(200).json({
             message: "사용자 로그인에 성공하였습니다.",
             user: {
-                id: userData.record_no,
-                username: userData.cegUserName,
-                email: userData.cegEmail,
+                id: req.session.user.id,
+                username: req.session.user.username,
+                email: req.session.user.email,
             },
         });
     } catch (error) {
@@ -164,22 +172,42 @@ export const login = async (req: Request, res: Response) => {
     }
 };
 
-// Generate Session Token
-export const signToken = async (req: Request, res: Response) => {
+export const logout = async (req: Request, res: Response) => {
     try {
-        const sessionToken = signSessionToken();
-
-        // req.session.cookie = sessionToken;
-
-        // 세션 토큰 만들어서 db에 저장했다고 치자.
-
-        // res.cookie();
+        req.session.destroy(function () {
+            req.session;
+        });
 
         return res.status(200).json({
-            message: "세션 토큰이 정상적으로 발급되었습니다.",
+            message: "사용자 로그아웃에 성공하였습니다.",
         });
     } catch (error) {
-        console.log(error);
+        return res.status(500).json({
+            message: "서버 에러가 발생했습니다.",
+        });
+    }
+};
+
+export const checkUser = async (req: Request, res: Response) => {
+    try {
+        console.log("Session: ", req.session);
+        if (req.session.user) {
+            return res.status(200).json({
+                message: "사용자는 현재 로그인 중입니다.",
+                authenticated: true,
+                user: {
+                    id: req.session.user!.id,
+                    username: req.session.user!.username,
+                    email: req.session.user!.email,
+                },
+            });
+        } else {
+            return res.status(201).json({
+                message: "사용자는 현재 로그인 중이 아닙니다.",
+                authenticated: false,
+            });
+        }
+    } catch (error) {
         return res.status(500).json({
             message: "서버 에러가 발생했습니다.",
         });
