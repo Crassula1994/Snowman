@@ -27,9 +27,7 @@ export default function Login() {
 
     // Define validation schema using Yup
     const validationSchema = Yup.object().shape({
-        email: Yup.string()
-            .email("유효하지 않은 이메일 주소입니다.")
-            .required("이메일을 입력해야 합니다."),
+        userId: Yup.string().required("아이디를 입력해야 합니다."),
         password: Yup.string().required("비밀번호를 입력해야 합니다."),
     });
 
@@ -54,25 +52,25 @@ export default function Login() {
             <div className="space-y-2 text-center">
                 <TitleWrapper>로그인</TitleWrapper>
                 <DescWrapper>
-                    회원가입 시 입력한 이메일과 비밀번호로 로그인하세요.
+                    회원가입 시 입력한 아이디와 비밀번호로 로그인하세요.
                 </DescWrapper>
             </div>
             <hr />
             {/* Formik form wrapper */}
             <Formik
-                initialValues={{ email: "", password: "" }}
+                initialValues={{ userId: "", password: "" }}
                 validationSchema={validationSchema}
                 onSubmit={handleSubmit}
             >
                 {/* Render form inside Formik */}
                 {({ handleSubmit }: FormikProps<Partial<UserType>>) => (
                     <Form className="space-y-4" onSubmit={handleSubmit}>
-                        {/* Email input field */}
-                        <Form.Group className="mb-3" controlId="email">
-                            <Form.Label>이메일</Form.Label>
+                        {/* User ID input field */}
+                        <Form.Group className="mb-3" controlId="user-id">
+                            <Form.Label>아이디</Form.Label>
                             <Field
-                                type="email"
-                                name="email"
+                                type="userId"
+                                name="userId"
                                 as={Form.Control}
                             />
                         </Form.Group>

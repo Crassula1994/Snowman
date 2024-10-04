@@ -6,7 +6,14 @@ declare module "express-session" {
             userId: string;
             userName: string;
             email: string;
+            recordNo: string;
         };
-        isOnline: boolean;
+        userLog?: [
+            {
+                logType: string;
+                logCreatedAt: string;
+                address: string;
+            }
+        ];
     }
 }

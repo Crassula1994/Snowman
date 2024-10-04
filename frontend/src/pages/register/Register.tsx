@@ -26,7 +26,12 @@ export default function Register() {
     const [success, setSuccess] = useState("");
 
     const validationSchema = Yup.object().shape({
-        username: Yup.string()
+        userId: Yup.string()
+            .min(3, "아이디가 너무 짧습니다.")
+            .max(15, "아이디가 너무 깁니다.")
+            .required("아이디를 입력해야 합니다.")
+            .matches(/^[a-z0-9]+$/, "아이디의 형식이 올바르지 않습니다."),
+        userName: Yup.string()
             .min(2, "이름이 너무 짧습니다.")
             .max(15, "이름이 너무 깁니다.")
             .required("이름을 입력해야 합니다.")
@@ -70,7 +75,12 @@ export default function Register() {
             </div>
             <hr />
             <Formik
-                initialValues={{ username: "", email: "", password: "" }}
+                initialValues={{
+                    userId: "",
+                    userName: "",
+                    email: "",
+                    password: "",
+                }}
                 validationSchema={validationSchema}
                 onSubmit={handleSubmit}
             >
@@ -100,18 +110,32 @@ export default function Register() {
                                 </NavLink>
                             </div>
                         )}
-                        <Form.Group className="mb-3" controlId="name">
+                        <Form.Group className="mb-3" controlId="user-id">
+                            <Form.Label>
+                                <b>아이디</b>: 영어 소문자 및 숫자로만 구성된 3
+                                ~ 15글자의 아이디가 필요합니다.
+                            </Form.Label>
+                            <Field
+                                type="text"
+                                name="userId"
+                                as={Form.Control}
+                            />
+                            {errors.userId && touched.userId ? (
+                                <div>{errors.userId}</div>
+                            ) : null}
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="user-name">
                             <Form.Label>
                                 <b>이름</b>: 한글로 된 2 ~ 15글자의 이름이
                                 필요합니다.
                             </Form.Label>
                             <Field
                                 type="text"
-                                name="username"
+                                name="userName"
                                 as={Form.Control}
                             />
-                            {errors.username && touched.username ? (
-                                <div>{errors.username}</div>
+                            {errors.userName && touched.userName ? (
+                                <div>{errors.userName}</div>
                             ) : null}
                             {/* {errors.username && touched.username && (
                                 <Form.Control.Feedback type="invalid">

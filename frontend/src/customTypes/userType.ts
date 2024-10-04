@@ -1,8 +1,8 @@
 export interface UserType {
     userId: string;
-    username: string;
+    userName: string;
     email: string;
-    password: string;
+    password?: string;
     signInLog?: [
         {
             date: string;

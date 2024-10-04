@@ -1,23 +1,23 @@
 import { Router } from "express";
 import {
-    register,
-    login,
-    logout,
-    checkUser,
+    registerUser,
+    signInUser,
+    signOutUser,
+    getUserInfo,
 } from "../controller/user.controller";
 
 const userRouter = Router();
 
 // Register a new user
-userRouter.post("/register", register);
+userRouter.post("/register", registerUser);
 
 // Login a user
-userRouter.post("/login", login);
+userRouter.post("/login", signInUser);
 
 // Logout a user
-userRouter.post("/logout", logout);
+userRouter.post("/logout", signOutUser);
 
 // User Login check
-userRouter.get("/check", checkUser);
+userRouter.get("/user-info", getUserInfo);
 
 export default userRouter;
