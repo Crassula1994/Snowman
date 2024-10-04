@@ -13,17 +13,17 @@ const API_ACCESS_TOKEN = process.env.API_ACCESS_TOKEN;
 export const register = async (req: Request, res: Response) => {
     try {
         // get the user data from the request body
-        const { username, email, password } = req.body;
+        const { userId, userName, email, password } = req.body;
 
         // check if user data is provided
-        if (!username || !email || !password) {
+        if (!userName || !email || !password) {
             return res.status(400).json({
                 message: "Please provide all user details",
             });
         }
 
         const emailListFilter = {
-            bpname: "SignUp (Geun)",
+            bpname: "Sign-Up-Snowman",
             lineitem: "no",
             filter_condition: "status=Active",
             filter_criteria: {
@@ -61,14 +61,15 @@ export const register = async (req: Request, res: Response) => {
 
         const userData = {
             options: {
-                bpname: "SignUp (Geun)",
+                bpname: "Sign-Up-Snowman",
             },
             data: [
                 {
                     cegCreatedAt: moment().utc().format("MM-DD-YYYY HH:mm:ss"),
-                    cegUserName: username,
-                    cegPassword: hashedPassword,
                     cegEmail: email,
+                    cegPassword: hashedPassword,
+                    cegUserId: userId,
+                    cegUserName: userName,
                 },
             ],
         };
@@ -94,30 +95,30 @@ export const register = async (req: Request, res: Response) => {
 export const login = async (req: Request, res: Response) => {
     try {
         // get the user data from the request body
-        const { email, password } = req.body;
+        const { userId, password } = req.body;
 
         // check if user data is provided
-        if (!email || !password) {
+        if (!userId || !password) {
             return res.status(400).json({
-                message: "Please provide all user details",
+                message: "아이디 또는 비밀번호를 입력하여 주십시오.",
             });
         }
 
         const userInfoFilter = {
-            bpname: "SignUp (Geun)",
+            bpname: "Sign-Up-Snowman",
             lineitem: "yes",
-            lineitem_fields: "cegType;cegCreatedAt2;cegIPAdress",
+            lineitem_fields: "cegLogType;cegLogCreatedAt;cegIPAddress",
             filter_condition: "status=Active",
             filter_criteria: {
                 filter: [
                     {
-                        field: "cegEmail",
-                        value: email,
+                        field: "cegUserId",
+                        value: userId,
                         condition_type: "eq",
                     },
                 ],
             },
-            record_fields: "cegUserName;cegEmail;cegPassword",
+            record_fields: "cegUserId;cegUserName;cegEmail;cegPassword",
         };
 
         // check if user already exists
@@ -129,7 +130,7 @@ export const login = async (req: Request, res: Response) => {
 
         if (user.data.data.length === 0) {
             return res.status(400).json({
-                message: "잘못된 이메일 또는 비밀번호입니다.",
+                message: "잘못된 아이디 또는 비밀번호입니다.",
             });
         }
 
@@ -142,14 +143,14 @@ export const login = async (req: Request, res: Response) => {
         );
         if (!validPassword) {
             return res.status(400).json({
-                message: "잘못된 이메일 또는 비밀번호입니다.",
+                message: "잘못된 아이디 또는 비밀번호입니다.",
             });
         }
 
         // session Created
         req.session.user = {
-            id: userData.record_no,
-            username: userData.cegUserName,
+            userId: userData.cegUserId,
+            userName: userData.cegUserName,
             email: userData.cegEmail,
         };
         req.session.isOnline = true;
@@ -160,8 +161,8 @@ export const login = async (req: Request, res: Response) => {
         return res.status(200).json({
             message: "사용자 로그인에 성공하였습니다.",
             user: {
-                id: req.session.user.id,
-                username: req.session.user.username,
+                id: req.session.user.userId,
+                username: req.session.user.userName,
                 email: req.session.user.email,
             },
         });
@@ -196,8 +197,8 @@ export const checkUser = async (req: Request, res: Response) => {
                 message: "사용자는 현재 로그인 중입니다.",
                 authenticated: true,
                 user: {
-                    id: req.session.user!.id,
-                    username: req.session.user!.username,
+                    id: req.session.user!.userId,
+                    username: req.session.user!.userName,
                     email: req.session.user!.email,
                 },
             });
