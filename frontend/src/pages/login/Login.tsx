@@ -29,6 +29,10 @@ export default function Login() {
     const { authenticated } = useLoaderData() as LoginLoaderData;
     const navigate = useNavigate();
 
+    const handleSignUp = () => {
+        navigate("/register");
+    };
+
     useEffect(() => {
         if (authenticated) {
             navigate("/play");
@@ -102,6 +106,13 @@ export default function Login() {
                                 className="w-full"
                             >
                                 로그인
+                            </Button>
+                            <Button
+                                primary="true"
+                                onClick={handleSignUp}
+                                className="w-full"
+                            >
+                                회원가입
                             </Button>
                         </ButtonWrapper>
                     </Form>
