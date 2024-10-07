@@ -1,8 +1,8 @@
 import { useLoaderData, useNavigate } from "react-router-dom";
-import { checkLogin, logoutUser } from "@service/index.service";
+import { logoutUser } from "@service/index.service";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-import { UserType, LogType } from "@customTypes/userType";
+import { LogType } from "@customTypes/userType";
 import formatDateString from "@utils/format";
 import { LoginLoaderData } from "@customTypes/routerType";
 
@@ -14,14 +14,8 @@ const PlayContainer = styled("div")`
 `;
 
 export default function Play() {
-    const { authenticated } = useLoaderData() as LoginLoaderData;
+    const { authenticated, user } = useLoaderData() as LoginLoaderData;
     const navigate = useNavigate();
-    const [user, setUser] = useState<UserType>({
-        userId: "",
-        userName: "",
-        email: "",
-        signInLog: [{ date: "", type: "", address: "" }],
-    });
     const [lastLoginLog, setLastLoginLog] = useState<LogType[] | undefined>([
         {
             type: "",
@@ -30,12 +24,6 @@ export default function Play() {
         },
     ]);
 
-    const getUserInfo = async () => {
-        const response = await checkLogin();
-        console.log(response);
-        setUser(response.user);
-    };
-
     const handleLogout = async () => {
         const response = await logoutUser();
         console.log(response.message);
@@ -43,21 +31,13 @@ export default function Play() {
     };
 
     const getLastLoginLog = () => {
-        console.log(
-            user
-                .signInLog!.slice()
-                .reverse()
-                .filter((log) => log.type === "Login Success")
-        );
-        return user
-            .signInLog!.slice()
+        if (!user || !user.signInLog) return [];
+
+        return user.signInLog
+            .slice()
             .reverse()
             .filter((log) => log.type === "Login Success");
     };
-
-    useEffect(() => {
-        getUserInfo();
-    }, []);
 
     useEffect(() => {
         if (!authenticated) {
