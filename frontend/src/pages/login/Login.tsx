@@ -4,8 +4,11 @@ import * as Yup from "yup";
 import { Button, Container } from "./loginStyles";
 import { loginUser } from "@service/index.service";
 import { UserType } from "@customTypes/userType";
+import { LoginLoaderData } from "@customTypes/routerType";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { useLoaderData } from "react-router-dom";
+import { useEffect } from "react";
 
 const TitleWrapper = styled("div")`
     font-weight: 900;
@@ -23,7 +26,14 @@ const ButtonWrapper = styled("div")`
 `;
 
 export default function Login() {
+    const { authenticated } = useLoaderData() as LoginLoaderData;
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (authenticated) {
+            navigate("/play");
+        }
+    }, []);
 
     // Define validation schema using Yup
     const validationSchema = Yup.object().shape({

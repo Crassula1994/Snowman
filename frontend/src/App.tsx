@@ -1,8 +1,8 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import AppRoutes from "@routes/index.route";
 import GlobalStyle from "@styles/globalStyles";
 import theme from "@styles/theme";
 import styled, { ThemeProvider } from "styled-components";
+import { Outlet } from "react-router-dom";
 
 const AppContainer = styled("div")`
     width: 100%;
@@ -15,9 +15,9 @@ const AppContainer = styled("div")`
 export default function App() {
     return (
         <ThemeProvider theme={theme}>
+            <GlobalStyle />
             <AppContainer>
-                <GlobalStyle />
-                <AppRoutes />
+                <Outlet />
             </AppContainer>
         </ThemeProvider>
     );

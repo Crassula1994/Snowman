@@ -1,41 +1,38 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import Home from "@pages/home";
+import { createBrowserRouter } from "react-router-dom";
 import Login from "@pages/login";
 import Play from "@pages/play";
 import Register from "@pages/register";
+import App from "src/App";
+import { checkLogin } from "@service/index.service";
 
-// Component for defining application routes
-export default function AppRoutes() {
-    const user = false;
+const loginLoader = async () => {
+    const response = await checkLogin();
+    return response;
+};
 
-    return (
-        // Wrap routes with BrowserRouter to enable routing
-        <BrowserRouter>
-            {/* Define application routes */}
-            <Routes>
-                {/* Route for homepage, redirects to homepage if user is authenticated, otherwise redirects to login */}
-                <Route path="/" element={<Home />} />
-                {/* Route for registration page, redirects to homepage if user is authenticated, otherwise renders registration page */}
-                {user ? (
-                    <Route path="/register" element={<Navigate to="/" />} />
-                ) : (
-                    <Route path="/register" element={<Register />} />
-                )}
-                {/* Route for login page, redirects to homepage if user is authenticated, otherwise renders login page */}
-                {user ? (
-                    <Route path="/login" element={<Navigate to="/" />} />
-                ) : (
-                    <Route path="/login" element={<Login />} />
-                )}
-                {user ? (
-                    <Route path="/play" element={<Play />} />
-                ) : (
-                    // <Route path="/play" element={<Navigate to="/login" />} />
-                    <Route path="/play" element={<Play />} />
-                )}
-                {/* Route for 404 not found page, renders 404 not found page if no route matche*/}
-                <Route path="*" element={<h1>404 not found</h1>} />
-            </Routes>
-        </BrowserRouter>
-    );
-}
+const router = createBrowserRouter([
+    {
+        path: "/",
+        loader: loginLoader,
+        element: <App />,
+        children: [
+            {
+                path: "login",
+                loader: loginLoader,
+                element: <Login />,
+            },
+            {
+                path: "register",
+                loader: loginLoader,
+                element: <Register />,
+            },
+            {
+                path: "play",
+                loader: loginLoader,
+                element: <Play />,
+            },
+        ],
+    },
+]);
+
+export default router;

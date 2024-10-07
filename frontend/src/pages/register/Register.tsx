@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import { Formik, Field, FormikProps, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import { registerUser } from "@service/index.service";
 import { UserType } from "@customTypes/userType";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLoaderData, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { LoginLoaderData } from "@customTypes/routerType";
 
 const TitleWrapper = styled("div")`
     font-weight: 900;
@@ -23,7 +24,16 @@ const ButtonWrapper = styled("div")`
 `;
 
 export default function Register() {
+    const { authenticated } = useLoaderData() as LoginLoaderData;
     const [success, setSuccess] = useState("");
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        console.log(authenticated);
+        if (authenticated) {
+            navigate("/play");
+        }
+    }, []);
 
     const validationSchema = Yup.object().shape({
         userId: Yup.string()

@@ -1,9 +1,10 @@
-import { useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { checkLogin, logoutUser } from "@service/index.service";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { UserType, LogType } from "@customTypes/userType";
 import formatDateString from "@utils/format";
+import { LoginLoaderData } from "@customTypes/routerType";
 
 const PlayContainer = styled("div")`
     display: flex;
@@ -13,6 +14,7 @@ const PlayContainer = styled("div")`
 `;
 
 export default function Play() {
+    const { authenticated } = useLoaderData() as LoginLoaderData;
     const navigate = useNavigate();
     const [user, setUser] = useState<UserType>({
         userId: "",
@@ -37,7 +39,7 @@ export default function Play() {
     const handleLogout = async () => {
         const response = await logoutUser();
         console.log(response.message);
-        navigate("/");
+        navigate("/login");
     };
 
     const getLastLoginLog = () => {
@@ -55,6 +57,12 @@ export default function Play() {
 
     useEffect(() => {
         getUserInfo();
+    }, []);
+
+    useEffect(() => {
+        if (!authenticated) {
+            navigate("/login");
+        }
     }, []);
 
     useEffect(() => {
