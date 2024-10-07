@@ -7,7 +7,8 @@
             "@pages/*": ["src/pages/*"],
             "@routes/*": ["src/routes/*"],
             "@service/*": ["src/service/*"],
-            "@styles/*": ["src/styles/*"]
+            "@styles/*": ["src/styles/*"],
+            "@utils/*": ["src/utils/*"]
         }
     }
 }
