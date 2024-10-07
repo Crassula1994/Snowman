@@ -3,11 +3,11 @@ export interface UserType {
     userName: string;
     email: string;
     password?: string;
-    signInLog?: [
-        {
-            date: string;
-            type: string;
-            address: string;
-        }
-    ];
+    signInLog?: LogType[];
+}
+
+export interface LogType {
+    date: string;
+    type: string;
+    address: string;
 }
