@@ -10,6 +10,7 @@ const AppContainer = styled("div")`
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: ${(props) => props.theme.color.accent_focus};
 `;
 
 export default function App() {

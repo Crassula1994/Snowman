@@ -7,15 +7,28 @@ import { UserType } from "@customTypes/userType";
 import { NavLink, useLoaderData, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { LoginLoaderData } from "@customTypes/routerType";
+import TextButton from "@components/TextButton";
+
+const RegisterContainer = styled("div")`
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px 30px;
+    box-sizing: content-box;
+    border-radius: 20px;
+    background-color: ${(props) => props.theme.color.base_200};
+    box-shadow: 0px 0px 30px 5px ${(props) => props.theme.color.base_content};
+`;
 
 const TitleWrapper = styled("div")`
     font-weight: 900;
-    font-size: 50px;
+    font-size: 36px;
 `;
 
 const DescWrapper = styled("div")`
     font-weight: 400;
-    font-size: 20px;
+    font-size: 18px;
 `;
 
 const ButtonWrapper = styled("div")`
@@ -76,12 +89,10 @@ export default function Register() {
     };
 
     return (
-        <div className="mx-auto max-w-md space-y-6">
+        <RegisterContainer>
             <div className="space-y-2 text-center">
                 <TitleWrapper>회원가입</TitleWrapper>
-                <DescWrapper>
-                    회원가입을 위해 필요한 정보를 입력하세요.
-                </DescWrapper>
+                <DescWrapper>Sign-Up</DescWrapper>
             </div>
             <hr />
             <Formik
@@ -186,17 +197,15 @@ export default function Register() {
                         </Form.Group>
                         <hr />
                         <ButtonWrapper>
-                            <Button
-                                variant="primary"
+                            <TextButton
+                                width="160px"
                                 type="submit"
-                                className="w-full"
-                            >
-                                회원가입
-                            </Button>
+                                text="회원가입"
+                            />
                         </ButtonWrapper>
                     </Form>
                 )}
             </Formik>
-        </div>
+        </RegisterContainer>
     );
 }
