@@ -5,12 +5,29 @@ import { useEffect, useState } from "react";
 import { LogType } from "@customTypes/userType";
 import formatDateString from "@utils/format";
 import { LoginLoaderData } from "@customTypes/routerType";
+import TextButton from "@components/TextButton";
 
 const PlayContainer = styled("div")`
+    width: 40%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    padding: 40px 30px;
+    box-sizing: content-box;
+    border-radius: 20px;
+    background-color: ${(props) => props.theme.color.base_200};
+    box-shadow: 0px 0px 30px 5px ${(props) => props.theme.color.base_content};
+    gap: 10px;
+`;
+
+const TitleWrapper = styled("div")`
+    font-weight: 900;
+    font-size: 36px;
+`;
+
+const DescWrapper = styled("div")`
+    font-weight: 400;
+    font-size: 18px;
 `;
 
 export default function Play() {
@@ -52,28 +69,26 @@ export default function Play() {
 
     return (
         <PlayContainer>
-            <h1>유저 정보 페이지</h1>
             {user && (
                 <>
-                    <p>{user.userName}님 환영합니다!</p>
-                    <p>이메일: {user.email}</p>
-                    <p>최근 보안 활동:</p>
+                    <TitleWrapper>{user.userName} 님 환영합니다!</TitleWrapper>
+                    <DescWrapper>이메일: {user.email}</DescWrapper>
+                    <DescWrapper>최근 보안 활동:</DescWrapper>
                     {lastLoginLog && lastLoginLog.length > 0 ? (
                         lastLoginLog.slice(0, 3).map((log, index) => (
-                            <p key={index}>
+                            <DescWrapper key={index}>
                                 {log.address}에서 새로 로그인 -{" "}
                                 {formatDateString(log.date)}
-                            </p>
+                            </DescWrapper>
                         ))
                     ) : (
                         <p>접속 기록이 없습니다.</p>
                     )}
-                    <button
-                        className="btn mx-3 btn-primary"
+                    <TextButton
+                        width="160px"
+                        text="로그아웃"
                         onClick={handleLogout}
-                    >
-                        로그아웃
-                    </button>
+                    />
                 </>
             )}
         </PlayContainer>
