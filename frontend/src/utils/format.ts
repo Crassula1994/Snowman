@@ -16,8 +16,6 @@ function formatDateString(dateString: string | undefined) {
     const newMinutes = String(date.getMinutes()).padStart(2, "0");
     const newSeconds = String(date.getSeconds()).padStart(2, "0");
 
-    console.log(year);
-
     return `${newYear}년 ${newMonth}월 ${newDay}일 ${newHours}:${newMinutes}:${newSeconds}`;
 }
 
