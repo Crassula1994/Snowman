@@ -2,8 +2,8 @@ import { createBrowserRouter } from "react-router-dom";
 import Login from "@pages/login";
 import Play from "@pages/play";
 import Register from "@pages/register";
-import App from "src/App";
 import { checkLogin } from "@service/index.service";
+import App from "src/App";
 
 const loginLoader = async () => {
     const response = await checkLogin();
