@@ -26,7 +26,7 @@ export const registerUser = async (req: Request, res: Response) => {
         }
 
         const emailListFilter = {
-            bpname: "Sign-Up-Snowman",
+            bpname: "Snowman-Member",
             lineitem: "no",
             filter_condition: "status=Active",
             filter_criteria: {
@@ -65,7 +65,7 @@ export const registerUser = async (req: Request, res: Response) => {
 
         const userData = {
             options: {
-                bpname: "Sign-Up-Snowman",
+                bpname: "Snowman-Member",
             },
             data: [
                 {
@@ -111,7 +111,7 @@ export const signInUser = async (req: Request, res: Response) => {
         }
 
         const userInfoFilter = {
-            bpname: "Sign-Up-Snowman",
+            bpname: "Snowman-Member",
             lineitem: "no",
             filter_condition: "status=Active",
             filter_criteria: {
@@ -151,7 +151,7 @@ export const signInUser = async (req: Request, res: Response) => {
         const signInStatus = isValidPassword ? "Success" : "Failure";
         const userLogData = {
             options: {
-                bpname: "Sign-Up-Snowman",
+                bpname: "Snowman-Member",
             },
             data: [
                 {
@@ -216,7 +216,7 @@ export const signOutUser = async (req: Request, res: Response) => {
     try {
         const userLogData = {
             options: {
-                bpname: "Sign-Up-Snowman",
+                bpname: "Snowman-Member",
             },
             data: [
                 {
@@ -267,7 +267,7 @@ export const getUserInfo = async (req: Request, res: Response) => {
     try {
         if (req.session.user) {
             const userInfoFilter = {
-                bpname: "Sign-Up-Snowman",
+                bpname: "Snowman-Member",
                 lineitem: "yes",
                 lineitem_fields: "cegLogType;cegLogCreatedAt;cegIPAddress",
                 filter_condition: "status=Active",
@@ -308,7 +308,7 @@ export const getUserInfo = async (req: Request, res: Response) => {
                 authenticated: true,
                 user: {
                     id: req.session.user!.userId,
-                    username: req.session.user!.userName,
+                    userName: req.session.user!.userName,
                     email: req.session.user!.email,
                     signInLog,
                 },
@@ -320,6 +320,7 @@ export const getUserInfo = async (req: Request, res: Response) => {
             });
         }
     } catch (error) {
+        console.log(error);
         res.status(500).json({
             message: "서버 에러가 발생했습니다.",
         });
