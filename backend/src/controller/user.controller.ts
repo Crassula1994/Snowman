@@ -307,7 +307,7 @@ export const getUserInfo = async (req: Request, res: Response) => {
                 message: "사용자는 현재 로그인 중입니다.",
                 authenticated: true,
                 user: {
-                    id: req.session.user!.userId,
+                    userId: req.session.user!.userId,
                     userName: req.session.user!.userName,
                     email: req.session.user!.email,
                     signInLog,
